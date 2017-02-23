@@ -51,21 +51,19 @@ class Media(ApiModel):
             setattr(self, key, value)
 
     def get_standard_resolution_url(self):
-        if self.type == 'image':
+        if self.type == 'image' or not hasattr(self, 'videos'):
             return self.images['standard_resolution'].url
         else:
             return self.videos['standard_resolution'].url
 
     def get_low_resolution_url(self):
-        if self.type == 'image':
+        if self.type == 'image' or not hasattr(self, 'videos'):
             return self.images['low_resolution'].url
         else:
             return self.videos['low_resolution'].url
 
-
     def get_thumbnail_url(self):
         return self.images['thumbnail'].url
-
 
     def __unicode__(self):
         return "Media: %s" % self.id
