@@ -73,7 +73,9 @@ class Media(ApiModel):
         new_media = Media(id=entry['id'])
         new_media.type = entry['type']
 
-        new_media.user = User.object_from_dictionary(entry['user'])
+        user_object = entry['user']
+        user_object['id'] = None
+        new_media.user = User.object_from_dictionary(user_object)
 
         new_media.images = {}
         for version, version_info in six.iteritems(entry['images']):
@@ -90,6 +92,7 @@ class Media(ApiModel):
         new_media.likes = []
         if 'data' in entry['likes']:
             for like in entry['likes']['data']:
+                like['id'] = None
                 new_media.likes.append(User.object_from_dictionary(like))
 
         new_media.comment_count = entry['comments']['count']
@@ -148,7 +151,10 @@ class Comment(ApiModel):
 
     @classmethod
     def object_from_dictionary(cls, entry):
-        user = User.object_from_dictionary(entry['from'])
+        user_object = entry['from']
+        user_object['id'] = None
+        user = User.object_from_dictionary(user_object)
+
         text = entry['text']
         created_at = timestamp_to_datetime(entry['created_time'])
         id = entry['id']
