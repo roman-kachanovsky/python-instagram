@@ -190,9 +190,8 @@ class Location(ApiModel):
 
 class User(ApiModel):
 
-    # def __init__(self, id, *args, **kwargs):
-    def __init__(self, *args, **kwargs):
-        # self.id = id
+    def __init__(self, id, *args, **kwargs):
+        self.id = id
         for key, value in six.iteritems(kwargs):
             setattr(self, key, value)
 
@@ -240,7 +239,9 @@ class UserInPhoto(ApiModel):
     def object_from_dictionary(cls, entry):
         user = None
         if 'user' in entry:
-            user = User.object_from_dictionary(entry['user'])
+            user_object = entry['user']
+            user_object['id'] = None
+            user = User.object_from_dictionary(user_object)
 
         if 'position' in entry:
             position = Position(entry['position']['x'], entry['position']['y'])
