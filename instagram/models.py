@@ -74,7 +74,7 @@ class Media(ApiModel):
         new_media.type = entry['type']
 
         user_object = entry['user']
-        user_object['id'] = None
+        user_object['id'] = user_object.get('id', None)
         new_media.user = User.object_from_dictionary(user_object)
 
         new_media.images = {}
@@ -92,7 +92,7 @@ class Media(ApiModel):
         new_media.likes = []
         if 'data' in entry['likes']:
             for like in entry['likes']['data']:
-                like['id'] = None
+                like['id'] = like.get('id', None)
                 new_media.likes.append(User.object_from_dictionary(like))
 
         new_media.comment_count = entry['comments']['count']
@@ -152,7 +152,7 @@ class Comment(ApiModel):
     @classmethod
     def object_from_dictionary(cls, entry):
         user_object = entry['from']
-        user_object['id'] = None
+        user_object['id'] = user_object.get('id', None)
         user = User.object_from_dictionary(user_object)
 
         text = entry['text']
@@ -246,7 +246,7 @@ class UserInPhoto(ApiModel):
         user = None
         if 'user' in entry:
             user_object = entry['user']
-            user_object['id'] = None
+            user_object['id'] = user_object.get('id', None)
             user = User.object_from_dictionary(user_object)
 
         if 'position' in entry:
